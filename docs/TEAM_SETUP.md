@@ -33,42 +33,22 @@ sudo sh get-docker.sh
 sudo usermod -aG docker $USER
 ```
 
----
-
-## 📋 Step 2: Install Ollama
-
-### macOS
-```bash
-brew install ollama
-ollama serve  # Starts service
-```
-
-### Windows
-1. Download: https://ollama.ai/download/windows
-2. Run **OllamaSetup.exe**
-3. Verify:
-```powershell
-ollama --version
-```
-
-### Linux
-```bash
-curl -fsSL https://ollama.ai/install.sh | sh
-ollama serve
-```
+**✅ That's it! Ollama, PostgreSQL, Redis, and ChromaDB are all included in Docker.**
 
 ---
 
-## 📋 Step 3: Install Git, Node.js, Python
+## 📋 Step 2: Install Git, Node.js, Python (Optional)
+
+**⚠️ Only needed if you want to run frontend/backend manually (without Docker)**
 
 ### macOS
 ```bash
-brew install git node@18 python@3.11
+brew install git node@20 python@3.11
 ```
 
 ### Windows
 1. **Git:** https://git-scm.com/download/win (use defaults)
-2. **Node.js:** https://nodejs.org/ (LTS version)
+2. **Node.js:** https://nodejs.org/ (LTS version 20+)
 3. **Python:** https://www.python.org/ (**✅ Check "Add to PATH"**)
 
 ### Linux
@@ -78,7 +58,7 @@ sudo apt install git nodejs npm python3.11 python3-pip python3-venv
 
 ---
 
-## 🚀 Step 4: Clone & Setup Project
+## 🚀 Step 3: Clone Project
 
 ### All Platforms
 ```bash
@@ -88,30 +68,7 @@ cd AI-powered-Learning-Platform
 
 ---
 
-## 🤖 Step 5: Download AI Models (~10GB)
-
-### macOS/Linux
-```bash
-ollama pull llama3.1:8b        # 4.7GB
-ollama pull nomic-embed-text    # 274MB
-ollama pull codellama:7b        # 3.8GB
-```
-
-### Windows
-```powershell
-ollama pull llama3.1:8b
-ollama pull nomic-embed-text
-ollama pull codellama:7b
-```
-
-**Verify:**
-```bash
-ollama list
-```
-
----
-
-## 🐳 Step 6: Start Everything with Docker
+## 🐳 Step 4: Start Everything with Docker
 
 ### All Platforms
 ```bash
@@ -134,23 +91,53 @@ docker-compose logs -f
 - Backend: http://localhost:8000
 - API Docs: http://localhost:8000/api/docs
 
-**Test Ollama:**
+**Test Ollama (after models downloaded):**
 ```bash
-ollama run llama3.1:8b "Hello!"
+docker exec learning-platform-ollama ollama run llama3.1:8b "Hello!"
+```
+# Start all services (PostgreSQL, Redis, ChromaDB, Ollama, Backend, Frontend)
+docker compose up -d
+
+# Check status
+docker compose ps
+
+# View logs
+docker compose logs -f
+```
+
+**This will download and start:**
+- PostgreSQL (database)
+- Redis (caching)
+- ChromaDB (vector database)
+- **Ollama (AI models) - 3GB image**
+- Backend API
+- Frontend
+
+---
+
+## 🤖 Step 5: Download AI Models (~10GB)
+
+**After Docker services start, download AI models:**
+
+### All Platforms
+```bash
+# Option 1: Use script
+./scripts/pull-models.sh
+
+# Option 2: Manual
+docker exec learning-platform-ollama ollama pull llama3.1:8b
+docker exec learning-platform-ollama ollama pull nomic-embed-text
+docker exec learning-platform-ollama ollama pull codellama:7b
+```
+
+**Verify models:**
+```bash
+docker exec learning-platform-ollama ollama list
 ```
 
 ---
 
-## 🛠️ Manual Setup (No Docker)
-
-If you prefer to skip Docker:
-
-### Backend
-
-**macOS/Linux:**
-```bash
-cd backend
-python -m venv venv
+## ✅ Step 6: Verify Setup
 source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
@@ -183,18 +170,19 @@ npm run dev
 
 ### Ollama Not Working
 
-**macOS/Linux:**
+**All Platforms:**
 ```bash
-ollama list
-ollama run llama3.1:8b "test"
-pkill ollama && ollama serve  # Restart
-```
+# Check if Ollama container is running
+docker compose ps
 
-**Windows:**
-```powershell
-ollama list
-ollama run llama3.1:8b "test"
-# Restart: System tray → Right-click Ollama → Restart
+# View Ollama logs
+docker compose logs ollama
+
+# Test Ollama
+docker exec learning-platform-ollama ollama list
+
+# Restart Ollama
+docker compose restart ollama
 ```
 
 ### Port Already in Use
@@ -286,12 +274,11 @@ docker-compose down
 ---
 
 ## ✅ Setup Checklist
-
-- [ ] Docker Desktop installed
-- [ ] Ollama installed
-- [ ] Git, Node.js, Python installed
+ and running
 - [ ] Repository cloned
-- [ ] Models downloaded (ollama list shows 3 models)
+- [ ] `docker compose up -d` successful
+- [ ] All containers running (`docker compose ps`)
+- [ ] AI models downloaded (3 models)st shows 3 models)
 - [ ] docker-compose up successful
 - [ ] Frontend works at localhost:3000
 - [ ] Backend API at localhost:8000/api/docs
