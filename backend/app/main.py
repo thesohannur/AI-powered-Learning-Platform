@@ -40,10 +40,13 @@ async def health_check():
     return {"status": "healthy"}
 
 
-# Import and include routers (will be added in Phase 1)
-# from app.api.routes import auth, cms, search, generation, chat
-# app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
-# app.include_router(cms.router, prefix="/api/cms", tags=["cms"])
+# Import and include routers
+from app.api.routes import auth, materials
+app.include_router(auth.router, prefix="/api/auth", tags=["authentication"])
+app.include_router(materials.router, prefix="/api/materials", tags=["materials"])
+
+# Additional routers will be added in future phases
+# from app.api.routes import search, generation, chat
 # app.include_router(search.router, prefix="/api/search", tags=["search"])
 # app.include_router(generation.router, prefix="/api/generate", tags=["generation"])
 # app.include_router(chat.router, prefix="/api/chat", tags=["chat"])

@@ -16,13 +16,13 @@ class Settings(BaseSettings):
     # Security
     SECRET_KEY: str = "your-secret-key-change-in-production"
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
     
     # CORS
     ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3001"]
     
     # Database
-    DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/learning_platform"
+    DATABASE_URL: str = "postgresql://postgres:postgres@postgres:5432/learning_platform"
     
     # Vector Database
     CHROMADB_HOST: str = "localhost"

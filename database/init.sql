@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS materials (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     file_path VARCHAR(500) NOT NULL,
-    file_type VARCHAR(50) NOT NULL,
+    file_type VARCHAR(255) NOT NULL,
     category VARCHAR(20) NOT NULL CHECK (category IN ('theory', 'lab')),
     week INTEGER,
     topic VARCHAR(255),

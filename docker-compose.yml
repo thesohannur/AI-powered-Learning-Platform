@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: learning_platform
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -62,13 +62,6 @@ services:
       - ollama_data:/root/.ollama
     networks:
       - learning-platform-network
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
 
   # Backend API (FastAPI)
   backend:
@@ -86,7 +79,7 @@ services:
       - OLLAMA_BASE_URL=http://ollama:11434
     volumes:
       - ./backend:/app
-      - ./uploads:/app/uploads
+      - uploads:/app/uploads
       - ./data:/app/data
     depends_on:
       postgres:
@@ -130,7 +123,7 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     volumes:
       - ./backend:/app
-      - ./uploads:/app/uploads
+      - uploads:/app/uploads
       - ./data:/app/data
     depends_on:
       - postgres
@@ -147,3 +140,4 @@ volumes:
   ollama_data:
   redis_data:
   chromadb_data:
+  uploads:
