@@ -79,7 +79,7 @@ services:
       - OLLAMA_BASE_URL=http://ollama:11434
     volumes:
       - ./backend:/app
-      - ./uploads:/app/uploads
+      - uploads:/app/uploads
       - ./data:/app/data
     depends_on:
       postgres:
@@ -123,7 +123,7 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     volumes:
       - ./backend:/app
-      - ./uploads:/app/uploads
+      - uploads:/app/uploads
       - ./data:/app/data
     depends_on:
       - postgres
@@ -140,3 +140,4 @@ volumes:
   ollama_data:
   redis_data:
   chromadb_data:
+  uploads:
