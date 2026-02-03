@@ -1,4 +1,4 @@
--- Initialize database schema
+git -- Initialize database schema
 -- This file is executed when PostgreSQL container starts
 
 -- Enable UUID extension
