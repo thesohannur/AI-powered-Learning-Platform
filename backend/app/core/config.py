@@ -3,6 +3,7 @@ Application configuration using Pydantic settings.
 """
 from pydantic_settings import BaseSettings
 from typing import List
+import os
 
 
 class Settings(BaseSettings):
@@ -18,8 +19,11 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
     
-    # CORS
-    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3001"]
+    # CORS - Parse comma-separated string from env
+    @property
+    def ALLOWED_ORIGINS(self) -> List[str]:
+        origins_str = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:3001")
+        return [origin.strip() for origin in origins_str.split(",")]
     
     # Database
     DATABASE_URL: str = "postgresql://postgres:postgres@postgres:5432/learning_platform"
@@ -44,6 +48,11 @@ class Settings(BaseSettings):
     # Celery
     CELERY_BROKER_URL: str = "redis://localhost:6379/0"
     CELERY_RESULT_BACKEND: str = "redis://localhost:6379/0"
+    
+    # Supabase (optional - for file storage)
+    SUPABASE_URL: str = ""
+    SUPABASE_ANON_KEY: str = ""
+    SUPABASE_SERVICE_KEY: str = ""
     
     class Config:
         env_file = ".env"
